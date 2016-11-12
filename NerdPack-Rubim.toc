@@ -1,0 +1,40 @@
+## Interface: 60100
+## Title: |r[|cff0070deNerdPack|r] Rubim Combat Routines
+## Notes: HuE
+## Dependencies: NerdPack
+
+Rubim-CR.xml
+
+#Funcao
+libs\library.lua
+#libs\pe.lua
+
+#Rotacao DK
+rotations\blood.lua
+rotations\frost.lua
+rotations\unh.lua
+
+#Rotacao Shammy
+rotations\enh.lua
+rotations\resto.lua
+
+#Rotation Druid
+rotations\bear.lua
+rotations\feral.lua
+rotations\resto.lua
+
+#Rotation Wr
+rotations\prot.lua
+rotations\fury.lua
+
+#Rotation Monks
+rotations\brew.lua
+rotations\ww.lua
+
+#rotations DH
+rotations\vg.lua
+rotations\hv.lua
+
+#rotations Pally
+rotations\ret.lua
+rotations\protp.lua
