@@ -11,12 +11,13 @@ local exeOnLoad = function()
 end
 
 local UtilOFF = {
-	{ '46584' , '!pet.exists' },
+	{ '@Rubim.CastGroundSpell' }
 }
 
 local UtilC = {
-	{ '46584' , '!pet.exists' },
-	{'Blood Fury' , 'player.area(8).enemies >= 1' },
+	{ '@Rubim.Targeting' },
+	{ '@Rubim.CastGroundSpell' },
+	{ 'Blood Fury' , 'player.area(8).enemies >= 1 & target.exists' }
 }
 
 local Healing = {
@@ -57,7 +58,7 @@ local Standard = {
 --actions.standard=festering_strike,if=debuff.festering_wound.stack<=4&runic_power.deficit>23
 	{'Festering Strike' , 'target.debuff(Festering Wound).count <= 4 & player.rpdeficiet > 23'},
 --actions.standard+=/death_coil,if=!buff.necrosis.up&talent.necrosis.enabled&rune<=3
-	{'Death Coil' , '!player.buff(Necrosis) & talent(6, 2) & player.runes <= 3'},
+	{'Death Coil' , '!player.buff(Necrosis) & talent(6,2) & player.runes <= 3'},
 --actions.standard+=/scourge_strike,if=buff.necrosis.react&debuff.festering_wound.stack>=1&runic_power.deficit>15
 	{'Scourge Strike' , 'player.buff(Necrosis) & target.debuff(Festering Wound).count >= 1 & player.rpdeficiet > 15'},
 --actions.standard+=/clawing_shadows,if=buff.necrosis.react&debuff.festering_wound.stack>=1&runic_power.deficit>15
@@ -71,20 +72,20 @@ local Standard = {
 --actions.standard+=/clawing_shadows,if=rune>=2&debuff.festering_wound.stack>=1&runic_power.deficit>15
 	{'Clawing Shadows' , 'player.runes >= 2 & target.debuff(Festering Wound).count >= 1 & player.rpdeficiet > 15'},
 --actions.standard+=/death_coil,if=talent.shadow_infusion.enabled&talent.dark_arbiter.enabled&!buff.dark_transformation.up&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(6, 1) & talent(7, 1) & pet.buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(6,1) & talent(7,1) & pet.buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.standard+=/death_coil,if=talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled&!buff.dark_transformation.up
-	{'Death Coil' , 'talent(6, 1) & !talent(7, 1) & !pet.buff(Dark Transformation)' },
+	{'Death Coil' , 'talent(6,1) & !talent(7,1) & !pet.buff(Dark Transformation)' },
 --actions.standard+=/death_coil,if=talent.dark_arbiter.enabled&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(7, 1) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(7,1) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.standard+=/death_coil,if=!talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled
-	{'Death Coil' , '!talent(6, 1) & !talent(7, 1)', },
+	{'Death Coil' , '!talent(6,1) & !talent(7,1)', },
 }
 
 local Instructors = {
 --actions.instructors=festering_strike,if=debuff.festering_wound.stack<=4&runic_power.deficit>23
 	{'Festering Strike' , 'target.debuff(Festering Wound).count <= 4 & player.rpdeficiet > 23'},
 --actions.instructors+=/death_coil,if=!buff.necrosis.up&talent.necrosis.enabled&rune<=3
-	{'Death Coil' , '!player.buff(Necrosis) & talent(6, 2) & player.runes <= 3'},
+	{'Death Coil' , '!player.buff(Necrosis) & talent(6,2) & player.runes <= 3'},
 --actions.instructors+=/scourge_strike,if=buff.necrosis.react&debuff.festering_wound.stack>=5&runic_power.deficit>29
 	{'Scourge Strike' , 'player.buff(Necrosis) & target.debuff(Festering Wound).count >= 5 & player.rpdeficiet > 29'},
 --actions.instructors+=/clawing_shadows,if=buff.necrosis.react&debuff.festering_wound.stack>=5&runic_power.deficit>29
@@ -98,20 +99,20 @@ local Instructors = {
 --actions.instructors+=/clawing_shadows,if=rune>=2&debuff.festering_wound.stack>=5&runic_power.deficit>29
 	{'Clawing Shadows' , 'player.runes >= 2 & target.debuff(Festering Wound).count >= 5 & player.rpdeficiet > 29'},
 --actions.instructors+=/death_coil,if=talent.shadow_infusion.enabled&talent.dark_arbiter.enabled&!buff.dark_transformation.up&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(6, 1) & talent(7, 1) & !pet.Buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(6,1) & talent(7,1) & !pet.Buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.instructors+=/death_coil,if=talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled&!buff.dark_transformation.up
-	{'Death Coil' , 'talent(6, 1) & !talent(7, 1) & !pet.Buff(Dark Transformation)'},
+	{'Death Coil' , 'talent(6,1) & !talent(7,1) & !pet.Buff(Dark Transformation)'},
 --actions.instructors+=/death_coil,if=talent.dark_arbiter.enabled&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(7, 1) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(7,1) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.instructors+=/death_coil,if=!talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled
-	{'Death Coil' , '!talent(6, 1) & !talent(7, 1)'},
+	{'Death Coil' , '!talent(6,1) & !talent(7,1)'},
 }
 
 local Castigator = {
 --actions.castigator=festering_strike,if=debuff.festering_wound.stack<=4&runic_power.deficit>23
 	{'Festering Strike', 'target.debuff(Festering Wound).count <= 4 & player.rpdeficiet > 23'},
 --actions.castigator+=/death_coil,if=!buff.necrosis.up&talent.necrosis.enabled&rune<=3
-	{'Death Coil' , '!player.buff(Necrosis) & talent(6, 2) & player.runes <= 3'},
+	{'Death Coil' , '!player.buff(Necrosis) & talent(6,2) & player.runes <= 3'},
 --actions.castigator+=/scourge_strike,if=buff.necrosis.react&debuff.festering_wound.stack>=3&runic_power.deficit>23
 	{'Scourge Strike' , 'player.buff(Necrosis) & target.debuff(Festering Wound).count >= 3 & player.rpdeficiet > 23'},
 --actions.castigator+=/scourge_strike,if=buff.unholy_strength.react&debuff.festering_wound.stack>=3&runic_power.deficit>23
@@ -119,13 +120,13 @@ local Castigator = {
 --actions.castigator+=/scourge_strike,if=rune>=2&debuff.festering_wound.stack>=3&runic_power.deficit>23
 	{'Scourge Strike' , 'player.runes >= 2 & target.debuff(Festering Wound).count >= 5 & player.rpdeficiet > 29'},
 --actions.castigator+=/death_coil,if=talent.shadow_infusion.enabled&talent.dark_arbiter.enabled&!buff.dark_transformation.up&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(6, 1) & talent(7, 1) & !pet.Buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(6,1) & talent(7,1) & !pet.Buff(Dark Transformation) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.castigator+=/death_coil,if=talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled&!buff.dark_transformation.up
-	{'Death Coil' , 'talent(6, 1) & !talent(7, 1) & !pet.Buff(Dark Transformation)'},
+	{'Death Coil' , 'talent(6,1) & !talent(7,1) & !pet.Buff(Dark Transformation)'},
 --actions.castigator+=/death_coil,if=talent.dark_arbiter.enabled&cooldown.dark_arbiter.remains>15
-	{'Death Coil' , 'talent(7, 1) & player.spell(Dark Arbiter).cooldown > 15' },
+	{'Death Coil' , 'talent(7,1) & player.spell(Dark Arbiter).cooldown > 15' },
 --actions.castigator+=/death_coil,if=!talent.shadow_infusion.enabled&!talent.dark_arbiter.enabled
-	{'Death Coil' , '!talent(6, 1) & !talent(7, 1)'},
+	{'Death Coil' , '!talent(6,1) & !talent(7,1)'},
 }
 
 local Generic = {
@@ -144,9 +145,9 @@ local Generic = {
 --actions.generic+=/death_coil,if=runic_power.deficit<30
 	{ 'Death Coil' , 'player.rpdeficiet < 30' },
 --actions.generic+=/death_coil,if=!talent.dark_arbiter.enabled&buff.sudden_doom.up&!buff.necrosis.up&rune<=3
-	{'Death Coil' , '!talent(7, 1) & player.buff(Sudden Doom) & !player.buff(Necrosis) & player.runes <= 3'},
+	{'Death Coil' , '!talent(7,1) & player.buff(Sudden Doom) & !player.buff(Necrosis) & player.runes <= 3'},
 --actions.generic+=/death_coil,if=talent.dark_arbiter.enabled&buff.sudden_doom.up&cooldown.dark_arbiter.remains>5&rune<=3
-	{'Death Coil' , 'player.talent (7, 1) & player.buff(Sudden Doom) & player.spell(Dark Arbiter).cooldown > 5 & player.runes <= 3'},
+	{'Death Coil' , 'player.talent (7,1) & player.buff(Sudden Doom) & player.spell(Dark Arbiter).cooldown > 5 & player.runes <= 3'},
 --actions.generic+=/festering_strike,if=debuff.festering_wound.stack<7&cooldown.apocalypse.remains<5
 	{'Festering Strike' , 'target.debuff(Festering Wound).count < 7 & player.spell(Apocalypse).cooldown < 5'},
 --actions.generic+=/wait,sec=cooldown.apocalypse.remains,if=cooldown.apocalypse.remains<=1&cooldown.apocalypse.remains
@@ -166,15 +167,14 @@ local Generic = {
 --actions.generic+=/call_action_list,name=instructors,if=equipped.132448 *-Need the equipped function
 	{ Instructors , 'player.equipped(132448)'},
 --actions.generic+=/call_action_list,name=standard,if=!talent.castigator.enabled&!equipped.132448
-	{ Standard , '!talent(3, 2) & !player.equipped(132448)' },
+	{ Standard , '!talent(3,2) & !player.equipped(132448)' },
 --actions.generic+=/call_action_list,name=castigator,if=talent.castigator.enabled&!equipped.132448
-	{ Castigator , 'talent(3, 2) & !player.equipped(132448)' },
+	{ Castigator , 'talent(3,2) & !player.equipped(132448)' },
 }
 
 
 --DEFAULT
 local inCombat = {
-	{ UtilC , 'autocastfunction' },
 	{ UtilC },
 	{ Healing , 'toggle(useDS)' },
 	{ 'Outbreak', '!target.debuff(Virulent Plague)' },
@@ -184,7 +184,7 @@ local inCombat = {
 }
 
 local outCombat = {
-	{ UtilOFF , 'autocastfunction' },
+	{ UtilOFF },
 }
 
 NeP.CR:Add(252, '[RUB] Death Knight - Unholy', inCombat, outCombat, exeOnLoad)

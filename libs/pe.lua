@@ -5,7 +5,6 @@
 --/dump NeP.DSL:Get('areattd')('player')
 --/dump NeP.DSL:Get('area')('player')
 --/dump NeP.DSL:Get('lastmoved')('player')
-
 --/dump NeP.DSL:Get('allstacked')('player')
 --/dump NeP.DSL:Get('blood.rotation')('player')
 --incdmg
@@ -13,6 +12,37 @@
 --/dump NeP.DSL:Get('onmelee')('player')
 ----actions+=/hamstring,if=buff.battle_cry_deadly_calm.remains>cooldown.hamstring.remains
 --/dump NeP.DSL:Get('groundself')
+--/dump NeP.DSL:Get('gcddelay')('player')
+--/dump NeP.DSL:Get('tanking')('player')
+--/dump NeP.DSL:Get('lastcombo')('player','Blackout Kick')
+--/dump NeP.DSL:Get('lastcombo')('player','Blackout Kick')
+--/dump NeP.DSL:Get('threat')('target')
+--/dump NeP.DSL:Get('id')('target')
+--LASTGCD
+NeP.DSL:Register("lastcombo", function(Unit, Spell)
+	if NeP.Library:Fetch('Rubim').MonkCombo() == Spell then return false else return true end
+end)
+
+--TANKING
+NeP.DSL:Register('tanking', function(target)
+	if UnitThreatSituation("player") == nil then return false
+	elseif UnitThreatSituation("player") >= 2 then return true end
+end)
+
+--GCD DELAY
+NeP.DSL:Register('gcddelay', function(target)
+	if firstTime == nil then
+		ctime = GetTime()
+		firstTime = true
+	end
+	
+	if GetTime() - ctime >= 0.25 then
+		firstTime = nil
+		return true
+	else
+		return false
+	end
+end)
 
 ---DEMON HUNTER
 NeP.DSL:Register('bladedance', function(target)

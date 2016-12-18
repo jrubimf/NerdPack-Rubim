@@ -46,6 +46,7 @@ local ST = {
 }
 
 local inCombat = {
+	{ 'Vengeful Retreat' , 'lastgcd(Fel Rush)' },
 	{ UtilC },
 	{'%pause', 'keybind(lshift)'},
 	{Interrupts, 'target.interruptAt(50) & toggle(interrupts)'},

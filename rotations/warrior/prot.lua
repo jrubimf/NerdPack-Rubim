@@ -8,37 +8,16 @@ local exeOnLoad = function()
 	print("|cffFFFF00 --- |rRecommended Talents: 1/2 - 2/1 - 3/1 - 4/2 - 5/1 - 6/3 - 7/1")
 	print("|cffFFFF00 --- |rPersonal use.")
 	print("|cffFFFF00 ----------------------------------------------------------------------|r")
-
-	NeP.Interface:AddToggle({
-		key = 'saveDS',
-		icon = 'Interface\\Icons\\spell_deathknight_butcher2.png',
-		name = 'Save Death Strike',
-		text = 'BOT will Only Death Strike when RP is Capped, useful on fights were you need to cast an active mitigation.'
-	})
-		
-	NeP.Interface:AddToggle({
-		key = 'bonestorm',
-		icon = 'Interface\\Icons\\Ability_deathknight_boneshield.png',
-		name = 'Use 194844',
-		text = 'This will pool RP to use 194844.'
-	})
-	
-	NeP.Interface:AddToggle({
-		key = 'aoetaunt',
-		icon = 'Interface\\Icons\\spell_nature_shamanrage.png',
-		name = 'Aoe Taunt',
-		text = 'Experimental AoE Taunt.'
-	 })		
 	
 end
 
 local UtilOFF = {
-	{ '@Rubim.CastGroundSpell'},
+	{ '@Rubim.CastGroundSpell' }
 }
 
 local UtilC = {
-	{ '@Rubim.CastGroundSpell'},
-	{ '@Rubim.Targeting' },
+	{ '@Rubim.CastGroundSpell' },
+	{ 'Blood Fury' , 'player.area(8).enemies >= 1 & target.exists' }
 }
 
 
@@ -65,7 +44,8 @@ local Interrupts = {
 }
 
 local inCombat = {
-	{ UtilC , 'customfunction' },
+	{'%pause', 'keybind(lshift)'},
+	{ UtilC },
 	{{
 	{ "Focused Rage" , "player.buff(Vengeance: Ignore Pain)" },
 	{ "Ignore Pain" , "player.buff(Vengeance: Focused Rage)" },
@@ -92,7 +72,6 @@ local inCombat = {
 }
 
 local outCombat = {
-	{ UtilOFF , 'customfunction' },
 }
 
 NeP.CR:Add(73, '[RUB] Warrior - Prot', inCombat, outCombat, exeOnLoad)

@@ -1,24 +1,8 @@
+local _, Rubim = ...
+
 local exeOnLoad = function()
-	NeP.Interface.CreateSetting('Class Settings', function() NeP.Interface.ShowGUI('RubConfDkBlood') end)
-		NeP.Interface.CreateToggle(
-		'saveDS',
-		'Interface\\Icons\\spell_deathknight_butcher2.png',
-		'Save a Death Strike',
-		'Saving Runic.')
+	Rubim.meleeSpell = 53595
 end
-
-local Shared = {
-
-}
-
-local Survival = {
-	-- healthstone
-
-}
-
-local Healing = {
-
-}
 
 local Interrupts = {
 	-- Mind freeze
@@ -26,26 +10,31 @@ local Interrupts = {
 }
 
 local inCombat = {
-	{ "#trinket1" , { "target.boss" , "@Rubim.meleeRange"}},
+	{ '@Rubim.Targeting' },
+	{ '@Rubim.CastGroundSpell' },
+	
+--	{ "#trinket1" , { "target.boss" , "@Rubim.meleeRange"}},
 --	{ Survival , "player.health < 100"},
+	{'Avenger\'s Shield' , 'target.range > 7' },
+	{'Judgment' , 'target.range > 7' },
 	{{ -- SINGLE TARGET
-	--{'Demon\'s Bite'},
-		{'Judgment'},
+		{'Hammer of the Righteous' , 'player.spell(Hammer of the Righteous).charges >= 1.8'},
 		{'Avenger\'s Shield'},
-	}, "player.rarea(7).enemies <= 1" },
+		{'Judgment'},
+		{'Hammer of the Righteous'},
+	}, "player.area(7).enemies <= 1" },
 
 	{{ -- MULTI
+		{'Avenger\'s Shield'},
+		{'Consecration'},
+		{'Hammer of the Righteous' , 'player.spell(Hammer of the Righteous).charges >= 1.8'},
 		{'Judgment'},
-		{'Avenger\'s Shield'},		
-	}, "player.rarea(7).enemies >= 2" },
+		{'Hammer of the Righteous'},
+	}, "player.area(7).enemies >= 2" },
 }
 
 local outCombat = {
-	{Shared}
+	{ '@Rubim.CastGroundSpell' }
 }
 
-NeP.Engine.registerRotation(66, '[|cff'..NeP.Interface.addonColor..'Rubim (WIP) Pally - Plotection', {
---		{'pause', 'modifier.lat'},
-		{Shared},
-		{inCombat}
-	}, outCombat, exeOnLoad)
+NeP.CR:Add(66, '[RUB] Paladin - Protection', inCombat, outCombat, ExeOnLoad, GUI)

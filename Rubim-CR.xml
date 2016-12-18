@@ -14,6 +14,10 @@
   <Script file="rotations\warrior\arms.lua" />
   <Script file="rotations\dh\vg.lua" />
   <Script file="rotations\dh\hv.lua" />
+  <Script file="rotations\pally\ret.lua" />
+  <Script file="rotations\pally\prot.lua" />
+  <Script file="rotations\monk\brew.lua" />
+  <Script file="rotations\monk\ww.lua" />
   <!-- <Script file="rotations\dk\frost.lua" />
   <Script file="rotations\dk\unh.lua" />
   <Script file="rotations\shammy\enh.lua" />

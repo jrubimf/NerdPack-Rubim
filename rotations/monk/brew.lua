@@ -1,63 +1,64 @@
+local _, Rubim = ...
+
+local GUI = {
+	{type = 'header', text = 'Keybinds:'},
+	{type = 'text', text = 'Lshift: Pause\n'},
+	{type = 'spacer'},{type = 'ruler'},
+	{type = 'checkbox', text = 'Automated Death and Decay', key = 'aDnD', default = false},
+	{type = 'checkbox', text = 'Save DS', key = 'saveDS', default = false},
+	{type = 'checkbox', text = 'Bonestorm', key = 'bonestorm', default = false}
+}
+
 local exeOnLoad = function()
-	meleeSpell = 100780
-	print("melee Spell: ".. GetSpellInfo(meleeSpell) .. "(" .. meleeSpell .. ")")
+--	NePCR.Splash()
+	Rubim.meleeSpell = 100780
+	print("|cffFFFF00 ----------------------------------------------------------------------|r")
+	print("|cffFFFF00 --- |rDeath Knight |cffC41F3BBlood |r")
+	print("|cffFFFF00 --- |rRecommended Talents: 1/2 - 2/1 - 3/1 - 4/2 - 5/1 - 6/3 - 7/1")
+	print("|cffFFFF00 --- |rPersonal use.")
+	print("|cffFFFF00 ----------------------------------------------------------------------|r")
 end
 
-local Shared = {
-	{{
-	{{
-	{ "Heroic Leap" , "@Rubim.DnD()" },
-	}, "modifier.lalt" },
-	}, "modifier.lcontrol" },
+local UtilOFF = {
+	{ '@Rubim.CastGroundSpell' }
 }
 
-local Survival = {
-	-- healthstone
-	{ "Expel Harm" , { "player.health <= 75" , "player.spell(Expel Harm).charges >= 3" }},
-	{ "Purifying Brew", { "@Rubim.DelayStagger()" , "@Rubim.DrinkStagger()" }},
-	{ "Healing Elixir" , { "player.health <= 85" , "@Rubim.DelayHealing()" }},
-}
-
-local Healing = {
-	{ "Victory Rush" , { "player.health <= 90" , "player.buff(32216).duration < 31" }},
-	{ "Victory Rush" , "player.buff(32216).duration < 5" },
-	{ "Victory Rush", "player.health <= 50" },
+local UtilC = {
+	{ '@Rubim.Targeting' },
+	{ '@Rubim.CastGroundSpell' },
+	{ 'Blood Fury' , 'player.area(8).enemies >= 1 & target.exists' }
 }
 
 local Interrupts = {
-	-- Mind freeze
-	{ '47528' },
+	{'Mind Freeze'},
 }
 
 local inCombat = {
-	{ Survival , "player.health < 100"},
---	{ "Ignore Pain" , { "@Rubim.IG()" , "player.rage >= 80" , "target.ttd >= 4" }},
-
-	{{ -- SINGLE TARGET
-		{ "Blackout Strike" },
-		{ "Keg Smash", { "@Rubim.meleeRange()" , "player.buff(Blackout Combo)" }},
+	{'%pause', 'keybind(lshift)'},
+	{ '#trinket1' , 'player.buff(Death and Decay)' },
+--	{ UtilOFF },
+	{ UtilC },
+	{Interrupts, 'target.interruptAt(50) & UI(interrupts)'},
+	{ "Healing Elixir" , "player.spell(Healing Elixir).charges >= 1.5 & player.health <= 80 & player.gcddelay" },
+	{ "Ironskin Brew" , "!player.buff(Ironskin Brew) & player.spell(Ironskin Brew).charges >= 3.5 & player.gcddelay & {player.debuff(Light Stagger) || player.debuff(Medium Stagger) || player.debuff(Heavy Stagger)}" },
+	{ "Purifying Brew" , 'player.buff(Ironskin Brew) & player.buff(Ironskin Brew).duration <= 1 & player.gcddelay & {player.debuff(Light Stagger) || player.debuff(Medium Stagger) || player.debuff(Heavy Stagger)}'},
+--	{ Cooldowns , "player.area(8).enemies >= 1" },
+	{{
+		{ "Keg Smash" , 'target.exists' },
+		{ "Breath of Fire" , 'inmelee'},
+		{ "Blackout Strike" , 'target.exists' },
 		{ "Tiger Palm" , "player.energy >= 65" },
-		{ "Breath of Fire" , { "target.debuff(Keg Smash) >= 1" , "@Rubim.meleeRange" }},
-		
-		
-	}, "player.rarea(10).enemies <= 2" },
-
-	{{ -- MULTI
-		{ "Blackout Strike" },
-		{ "Keg Smash", { "@Rubim.meleeRange()" , "player.buff(Blackout Combo)" }},
-		{ "Breath of Fire" , { "target.debuff(Keg Smash) >= 1" , "@Rubim.meleeRange()" }},
+	}, 'player.area(8).enemies >= 2' },
+	{{
+		{ "Keg Smash" , 'target.exists' },
+		{ "Blackout Strike" , 'target.exists' },
+		{ "Breath of Fire" , "inmelee"},
 		{ "Tiger Palm" , "player.energy >= 65" },
-		{ "Blackout Strike" },
-		
-	}, "player.rarea(10).enemies >= 3" },
+	}, 'player.area(8).enemies <= 1' },
 }
 
 local outCombat = {
-	{Shared}
+	{ UtilOFF },
 }
 
-NeP.Engine.registerRotation(268, '[|cff'..NeP.Interface.addonColor..'Rubim (WIP) Monk - Brewshit', {
---		{'pause', 'modifier.lat'},
-		{Shared},
-		{inCombat}
-	}, outCombat, exeOnLoad)
+NeP.CR:Add(268, '[RUB] Monk - Brewmaster', inCombat, outCombat, exeOnLoad, GUI)

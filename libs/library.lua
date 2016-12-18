@@ -1,30 +1,103 @@
+local RotationText = "None"
+local OneTimeRubim = nil
+local rotype = CreateFrame("Frame", "Rotation Indicator", UIParent)
+local rottext = rotype:CreateFontString("MyrotypeText", "OVERLAY")
+
+function CreateFrameRub()
+	rotype:SetWidth(240)
+	rotype:SetHeight(40)
+	rotype:SetPoint("TOP") -- Whats the chat anchor?
+	local tex = rotype:CreateTexture("BACKGROUND")
+	tex:SetAllPoints()
+	tex:SetTexture(0, 0, 0); tex:SetAlpha(0.5)
+	OneTimeRubim = 1
+end
+
+local event = function()
+	CreateFrameRub()
+	rottext:SetFontObject(GameFontNormalSmall)
+	rottext:SetJustifyH("CENTER") -- 
+	rottext:SetPoint("CENTER", rotype, "CENTER", 0, 0) -- Text on center
+	rottext:SetFont("Fonts\\FRIZQT__.TTF", 20)
+	rottext:SetShadowOffset(1, -1)
+	rottext:SetText("Nil")
+	rotype:SetScript("OnUpdate", function()
+	rottext:SetText("Rotation: " .. RotationText)
+	end)
+   
+	rotype:SetMovable(true)
+	rotype:EnableMouse(true)
+	rotype:SetScript("OnMouseDown", function(self, button)
+	if button == "LeftButton" and not self.isMoving then
+		self:StartMoving();
+		self.isMoving = true;
+		end
+	end)
+	rotype:SetScript("OnMouseUp", function(self, button)
+	if button == "LeftButton" and self.isMoving then
+		self:StopMovingOrSizing();
+		self.isMoving = false;
+	end
+	end)
+	rotype:SetScript("OnHide", function(self)
+	if ( self.isMoving ) then
+		self:StopMovingOrSizing();
+		self.isMoving = false;
+	end
+	end)
+end
+
+rotype:SetScript("OnEvent", event)
+rotype:RegisterEvent("PLAYER_LOGIN")
+
 local _, Rubim = ...
 --meta _G['Rubim'] = Rubim
 --/dump NeP.Library:Fetch('Rubim').Offtanking()
 --NeP.Library:Fetch('Rubim').GroundSpell('Death and Decay')
 --NeP.Library:Fetch('Rubim').Love()
+--NeP.Library:Fetch('Rubim').StaggerValue()
+--NeP.Library:Fetch('Rubim').MonkCombo()
+--NeP.Library:Fetch('Rubim').Targeting()
 
-function Rubim.Love()
-local quote = 'Eu te amo!'
-for i=1,20 do
-	dice = math.random(1,5)
-	if dice == 1 then quote = 'Eu te amo!' end
-	if dice == 2 then quote = 'Eu te adoro!' end
-	if dice == 3 then quote = 'Eu sou louco por você!' end
-	if dice == 4 then quote = 'Eu sou apaixonado por você!' end
-	if dice == 5 then quote = 'Eu sou caidinho por você!' end
-	SendChatMessage(quote, "SAY", nil, 1); 
-end
+
+local comboCast = CreateFrame("Frame")
+local LastCombo = "Nothing"
+function comboCast:UNIT_SPELLCAST_SUCCEEDED(unitID, spell, rank, lineID, spellID)
+	if unitID == "player" then
+	-- Begin Warrior Cleave Replacement
+				if spellID == 100780 then -- Cleave
+					LastCombo = "Tiger Palm"
+				end
+				if spellID == 107428 then -- Cleave
+					LastCombo = "Rising Sun Kick"
+				end
+				if spellID == 100784 then -- Cleave
+					LastCombo = "Blackout Kick"
+				end
+				if spellID == 113656 then -- Cleave
+					LastCombo = "Fists of Fury"
+				end
+				if spellID == 152175 then -- Cleave
+					LastCombo = "Whirling Dragon Punch"
+				end
+				if spellID == 101546 then -- Cleave
+					LastCombo = "Spinning Crane Kick"
+				end
+				
+	-- End Warrior Cleave Replacement
+	end
 end
 
-function Rubim.FunnyQuote()
-local quote = ""
-local dice = math.random(1,4)
-if dice == 1 then quote = '"Qual e a spec de Warlock que fica pegando na cabecinha?" (Ivin - 2016)' end
-if dice == 2 then quote = '"Estou tentando dar menos o cu." (Bruto - 2016)' end
-if dice == 3 then quote = '"Agora eu quero você, topa essa porra." (Godiny - 2016)' end
-if dice == 4 then quote = '"Pode colocar no meu." (Rafaelli - 2016)' end
-SendChatMessage(quote, "SAY", nil, 1); 
+comboCast:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+comboCast:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end)
+
+function Rubim.MonkCombo()
+	hitcombo = NeP.DSL:Get("buff")("player","Hit Combo")
+	if hitcombo then
+		return LastCombo
+	else
+		return "Nothing"
+	end	
 end
 
 function Rubim.Update()
@@ -59,22 +132,52 @@ function Rubim.TauntMechanics()
 	return false
 end
 
+--/dump NeP.Library:Fetch('Rubim').FindTank()
 function Rubim.FindTank()
-if isRaid == false then return nil end
-for _, Obj in pairs(NeP.OM:GetRoster()) do
-	if select(1,Obj.key) ~= "player" and select(1,Obj.role) == "TANK" then
-		tankKey = select(1,Obj.key)
+	local isRaid = IsInRaid() 
+	if isRaid == false then return nil end
+	for _, Obj in pairs(NeP.OM:GetRoster()) do
+		if select(1,Obj.key) ~= "player" and select(1,Obj.role) == "TANK" then
+			tankKey = select(1,Obj.key)
+		end
 	end
-end
-return tankKey
+	return tankKey
 end
 
+bossList = {
+--NIGHT
+"Nythendra",
+"Ursoc",
+"Cenarius",
+"Xavius",
+--TRIAL
+"Odyn",
+"Helya"
+
+}
+--/dump NeP.Library:Fetch('Rubim').Offtanking()
+--/dump NeP.DSL:Get('boss')('target')
+-- /dump select(1, UnitDetailedThreatSituation("raid24", "target"))
 function Rubim.Offtanking()
-	return false
-	--if Rubim.FindTank() then return false end
-	--local aggrostatus = UnitThreatSituation(Rubim.FindTank() , "target")
-	--if aggrostatus == nil then aggrostatus = 0 end
-	--if UnitExists("target") == true and aggrostatus >= 2 then return true end
+	local isBoss = false
+	for i=1,#bossList do
+		if UnitName("target") == bossList[i] then
+			isBoss = true
+		end
+	end
+	if isBoss == false then return false end
+	local isRaid = IsInRaid() 
+	local otherTank = Rubim.FindTank()
+	if otherTank == nil then return false end
+	if isRaid == false then return false end
+	local isTanking,_,threatpct,_,_ = UnitDetailedThreatSituation(otherTank, "target");
+--	local isBoss = NeP.DSL:Get('boss')('target')
+--	if isBoss == nil or isBoss == false then return false end
+	if isTanking == true then
+		return true
+	elseif isTanking == false then
+		return false
+	end
 end
 
 function Rubim.SetText(text)
@@ -89,10 +192,14 @@ function Rubim.Targeting()
 		for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
 			if Obj.distance <= 10 then
 				TargetNearestEnemy()
-				return true
+				RunMacroText("/startattack")
 			end
 		end
 	end
+	if exists and UnitIsEnemy("player","target") then
+		RunMacroText("/startattack")
+	end
+		
 end
 
 function Rubim.WarriorFR()
@@ -297,7 +404,7 @@ function Rubim.CDCheck(spellid)
 	then
 		Scooldown = 0
 	end
-	return Scooldown
+	return Scooldownww
 end
 
 
@@ -312,7 +419,7 @@ function Rubim.StaggerValue()
     local staggerLight, _, iconLight, _, _, remainingLight, _, _, _, _, _, _, _, _, _, _, _, valueStaggerLight, _ = UnitAura("player", GetSpellInfo(124275), "", "HARMFUL")
 	local staggerModerate, _, iconModerate, _, _, remainingModerate, _, _, _, _, _, _, _, _, _, _, _, valueStaggerModerate, _ = UnitAura("player", GetSpellInfo(124274), "", "HARMFUL")
 	local staggerHeavy, _, iconHeavy, _, _, remainingHeavy, _, _, _, _, _, _, _, _, _, _, _, valueStaggerHeavy, _ = UnitAura("player", GetSpellInfo(124273), "", "HARMFUL")
-    local staggerTotal= (remainingLight or remainingModerate or remainingHeavy or 0) * (valueStaggerLight or valueStaggerModerate or valueStaggerHeavy or 0)
+    local staggerTotal=UnitStagger("player");
     local percentOfHealth=(100/UnitHealthMax("player")*staggerTotal)
     local ticksTotal=(valueStaggerLight or valueStaggerLight or valueStaggerLight or 0)
     return percentOfHealth;
